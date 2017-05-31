@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var superagent = require('superagent');
 var alasql = require('alasql');
+var each = require('async-each-series');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,15 +10,20 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/packagebehaviour_api', function(req, res, next) {
-  const data = superagent.get('https://www.tratoli.com/packagebehaviour_api/?days=1')
-    data.send().then(response => {
-      // console.log(response.body);
-      // res.json(response.body);
-      var data = alasql('SELECT ip, COUNT(*) AS occuring FROM ? GROUP BY ip', [response.body]);
-      res.json(data)
-      console.log('>>>>>>>>.');
-      console.log(data);
-      console.log('>>>>>>>>>');
+  const request = superagent.get('https://www.tratoli.com/packagebehaviour_api/?days=1')
+    request.send().then(response => {
+      var ipData = alasql('SELECT ip AS keyData, COUNT(*) AS occuring FROM ? GROUP BY ip', [response.body]);
+      var locationData = alasql('SELECT location AS keyData, COUNT(*) AS occuring FROM ? GROUP BY location', [response.body]);
+      var customerData = alasql('SELECT customer AS keyData, COUNT(*) AS occuring FROM ? GROUP BY customer', [response.body]);
+      var clickDate = []
+      each(response.body, function(value, next) {
+        clickDate.push({clickDate: value.click_time.split('T')[0]});
+        next();
+      }, function (err) {
+        console.log('finished');
+        var clickDateData = alasql('SELECT clickDate AS keyData, COUNT(*) AS occuring FROM ? GROUP BY clickDate', [clickDate]);
+        res.json({ipData: ipData, locationData: locationData, customerData: customerData, clickDateData:clickDateData})
+      });
     }, err => {
       console.log(err.response.body);
     });

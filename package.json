@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "alasql": "^0.4.0",
+    "async-each-series": "^1.1.0",
     "body-parser": "~1.15.1",
     "chart.js": "^2.6.0",
     "cookie-parser": "~1.4.3",

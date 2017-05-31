@@ -6,7 +6,7 @@ export default class BarChart extends Component{
     let labels =[]
     let count = []
     this.props.data.map((data, index) => {
-        labels.push(data.ip)
+        labels.push(data.keyData)
         count.push(data.occuring)
 		})
     const data = {
@@ -26,7 +26,6 @@ export default class BarChart extends Component{
     return(
       <HorizontalBar
         data={data}
-
         width={100}
         height={50}
         options={{
