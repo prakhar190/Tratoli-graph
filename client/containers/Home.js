@@ -21,6 +21,12 @@ export default class Home extends Component{
     return(
       <div>
         <h1> Bar Graph </h1>
+        <select>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
         <BarChart data={this.state.packageData}/>
       </div>
     );
