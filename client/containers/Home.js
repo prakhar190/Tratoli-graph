@@ -8,7 +8,7 @@ export default class Home extends Component{
   };
   onSelectChange =() => {
     const req = superagent.get('/packagebehaviour_api');
-      req.send({prakhar: 'ip'}).
+      req.send().
       then(res => {
         console.log(res.body);
         this.setState({packageData: res.body[this.refs.select.value]})

@@ -17,7 +17,7 @@ router.get('/packagebehaviour_api', function(req, res, next) {
       var customerData = alasql('SELECT customer AS keyData, COUNT(*) AS occuring FROM ? GROUP BY customer', [response.body]);
       var clickDate = []
       each(response.body, function(value, next) {
-        clickDate.push({clickDate: value.click_time.split('T')[0]});
+        clickDate.push({clickDate: value.click_time.split(' ')[0]});
         next();
       }, function (err) {
         console.log('finished');
