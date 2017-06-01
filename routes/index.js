@@ -10,11 +10,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/packagebehaviour_api', function(req, res, next) {
-  const request = superagent.get('https://www.tratoli.com/packagebehaviour_api/?days=1')
+  const request = superagent.get('https://www.tratoli.com/packagebehaviour_api/?days=' + req.query.days)
     request.send().then(response => {
       var ipData = alasql('SELECT ip AS keyData, COUNT(*) AS occuring FROM ? GROUP BY ip', [response.body]);
       var locationData = alasql('SELECT location AS keyData, COUNT(*) AS occuring FROM ? GROUP BY location', [response.body]);
-      var customerData = alasql('SELECT customer AS keyData, COUNT(*) AS occuring FROM ? GROUP BY customer', [response.body]);
+      var customerData = alasql('SELECT customer_name AS keyData, COUNT(*) AS occuring FROM ? GROUP BY customer_name', [response.body]);
       var clickDate = []
       each(response.body, function(value, next) {
         clickDate.push({clickDate: value.click_time.split(' ')[0]});

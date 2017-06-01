@@ -24,14 +24,18 @@ export default class BarChart extends Component{
       ]
     };
     return(
-      <HorizontalBar
-        data={data}
-        width={100}
-        height={50}
-        options={{
-            maintainAspectRatio: true
-        }}
-      />
+      <div className='chartWrapper'>
+        <div className='chartAreaWrapper'>
+          <HorizontalBar
+            data={data}
+            height={350}
+            options={{
+                responsive:true,
+                maintainAspectRatio: true,
+            }}
+          />
+        </div>
+      </div>
     );
   }
 }

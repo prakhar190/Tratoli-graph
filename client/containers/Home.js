@@ -4,29 +4,33 @@ import {BarChart} from 'components';
 import superagent from 'superagent';
 export default class Home extends Component{
   state = {
-    packageData: []
+    packageData: [],
+    days: 1
   };
+
+  getData(days){
+    const req = superagent.get('/packagebehaviour_api?days=' + days);
+    req.send().
+    then(res => {
+      console.log(res.body);
+      this.setState({packageData: res.body[this.refs.select.value], days: this.refs.days.value})
+    }, err => {
+      console.log(err.response.body);
+    });
+  }
+
+  onSubmitDays =() =>{
+    this.getData(this.refs.days.value);
+  }
+
   onSelectChange =() => {
-    const req = superagent.get('/packagebehaviour_api');
-      req.send().
-      then(res => {
-        console.log(res.body);
-        this.setState({packageData: res.body[this.refs.select.value]})
-      }, err => {
-        console.log(err.response.body);
-      });
+    this.getData(this.state.days);
   }
 
   componentWillMount(){
-    const req = superagent.get('/packagebehaviour_api');
-      req.send().
-      then(res => {
-        console.log(res.body);
-        this.setState({packageData: res.body.ipData})
-      }, err => {
-        console.log(err.response.body);
-      });
+    this.getData(this.state.days);
   }
+
   render(){
     return(
       <div>
@@ -37,6 +41,9 @@ export default class Home extends Component{
           <option value="customerData">CUSTOMER</option>
           <option value="clickDateData">CLICKDATE</option>
         </select>
+        &nbsp; &nbsp;
+        <input type='text' defaultValue={this.state.days} placeholder='Enter Days' ref='days' />
+        <button onClick ={() => this.onSubmitDays()}> Submit days </button>
         <BarChart data={this.state.packageData}/>
       </div>
     );
